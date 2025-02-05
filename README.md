@@ -49,7 +49,7 @@ phrases
 - phrase_text
 - translation
 ```
-### API Enfpoints
+### API Endpoints
 
 - GET /api/phrases/languages - Retrieves all available languages
 - GET /api/phrases/categories - Retrieves all phrase categories
