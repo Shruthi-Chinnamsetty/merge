@@ -1,56 +1,40 @@
-# Language Phrases Feature
+**Group 53:**
 
-Feature that allows users to explore and learn common phrases in different languages. Users can filter phrases by language and category (such as greetings, basic expressions, and emergency phrases).
+**Contributors:**
 
-## Features
+- Mahshid Ghazajoo (2334415)
+- Yonis Ashkir (2336957)
+- Rares Popovici (2335698)
+- Aditi Patil (2367992)
+- Ariana Islam (2338627)
+- Anas Abdi (2336048)
+- Waleed Amjad (2255905)
+- Shruthi Subudhi Chinnamsetty (2376562)
 
-- Browse phrases in multiple languages
-- Filter phrases by categories (Greetings, Basic, Emergency)
-- View original phrase text and its English translation
-- Responsive design that works on desktop and mobile devices
-- Real-time filtering and updates
+Pocket Map - Sustainable Travel Planner Group 53 Contributors:
 
-## Tech Stack
+🌍 About Pocket Map Pocket Map is a sustainable travel planning web application that helps users find eco-friendly travel options. The platform integrates features that simplify trip planning while promoting sustainability by offering carbon-efficient transportation, green accommodations, and community-driven recommendations.
 
-### Frontend
-- Next.js 15.1.6
-- TypeScript
-- Tailwind CSS for styling
-- Axios for API calls
+💡 Problem Statement Many travel apps focus on convenience but overlook sustainability. Pocket Map solves this by providing users with the most eco-friendly travel routes, accommodations, and activities. It encourages travelers to reduce their carbon footprint and engage in responsible tourism.
 
-### Backend
-- Spring Boot
-- PostgreSQL Database
-- Java
-- RESTful API
+🚀 Key Features ✅ Destination Search – Find desirable travel destinations. ✅ Route Suggestions – Navigate with the most eco-friendly transport options. ✅ Transport Filters – Avoid specific roads (e.g., highways, tolls, stairs). ✅ Public Transport Schedules – Direct links to bus, train, and metro schedules. ✅ Reviews & Ratings – Users can rate and review locations. ✅ Trip Itinerary Sharing – Share travel plans with friends via a link. ✅ Trip History & Analytics – Track previous trips and total distance traveled. ✅ Calendar Integration – Get reminders about upcoming trips. ✅ Sustainability Challenges – Users can complete green challenges for rewards. ✅ Community Engagement – Connect with other travelers for recommendations.
 
-## Database Schema
+🔍 What Makes Pocket Map Innovative? Sustainability Focus: Prioritizes eco-friendly travel solutions. Personalized Recommendations: Smart filtering based on user preferences. Real-Time Travel Updates: Keeps users informed about transportation schedules. Social & Community-Driven: Encourages shared experiences and insights.
 
-The application uses three main tables:
-- `languages`: Stores available languages
-- `categories`: Stores phrase categories
-- `phrases`: Stores the actual phrases with translations
+🌱 Join the Green Travel Revolution! Pocket Map is designed for conscious travelers who want to explore the world while minimizing their environmental impact. By integrating sustainable solutions, we aim to make every journey responsible and rewarding.
 
-### Database Relations
 
-```sql
-languages
-- language_id (PK)
-- language_name
 
-categories
-- category_id (PK)
-- category_name
 
-phrases
-- phrase_id (PK)
-- language_id (FK)
-- category_id (FK)
-- phrase_text
-- translation
-```
-### API Endpoints
 
-- GET /api/phrases/languages - Retrieves all available languages
-- GET /api/phrases/categories - Retrieves all phrase categories
-- GET /api/phrases/search - Searches phrases with optional language and category filters
+
+
+
+
+
+
+
+
+
+
+[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=16846430&assignment_repo_type=AssignmentRepo)
