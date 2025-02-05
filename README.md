@@ -32,6 +32,7 @@ The application uses three main tables:
 - `phrases`: Stores the actual phrases with translations
 
 ### Database Relations
+
 ```sql
 languages
 - language_id (PK)
@@ -47,10 +48,8 @@ phrases
 - category_id (FK)
 - phrase_text
 - translation
-
-
-
-**API Enfpoints**
+```
+### API Enfpoints
 
 - GET /api/phrases/languages - Retrieves all available languages
 - GET /api/phrases/categories - Retrieves all phrase categories
