@@ -1,1 +1,0 @@
-// your frontend react component goes here, next.js application
