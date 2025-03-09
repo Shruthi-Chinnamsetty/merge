@@ -20,6 +20,18 @@ public class DestinationController {
         return destinationService.getAllDestinations();
     }
     
+    @GetMapping("/search")
+    public List<Destination> searchDestinations(@RequestParam(required = false) String q) {
+        return destinationService.searchDestinations(q);
+    }
+    
+    @GetMapping("/search/advanced")
+    public List<Destination> advancedSearch(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String country) {
+        return destinationService.searchByNameAndCountry(name, country);
+    }
+    
     @PostMapping
     public ResponseEntity<Destination> addDestination(@RequestBody Destination destination) {
         Destination savedDestination = destinationService.addDestination(destination);

@@ -19,4 +19,28 @@ public class DestinationService {
     public Destination addDestination(Destination destination) {
         return destinationRepository.save(destination);
     }
+    
+    public List<Destination> searchDestinations(String searchTerm) {
+        if (searchTerm == null || searchTerm.trim().isEmpty()) {
+            return getAllDestinations();
+        }
+        return destinationRepository.searchDestinations(searchTerm);
+    }
+    
+    public List<Destination> searchByNameAndCountry(String name, String country) {
+        if ((name == null || name.trim().isEmpty()) && 
+            (country == null || country.trim().isEmpty())) {
+            return getAllDestinations();
+        }
+        
+        if (name == null || name.trim().isEmpty()) {
+            return destinationRepository.findByCountryContainingIgnoreCase(country);
+        }
+        
+        if (country == null || country.trim().isEmpty()) {
+            return destinationRepository.findByNameContainingIgnoreCase(name);
+        }
+        
+        return destinationRepository.findByNameContainingIgnoreCaseAndCountryContainingIgnoreCase(name, country);
+    }
 }
