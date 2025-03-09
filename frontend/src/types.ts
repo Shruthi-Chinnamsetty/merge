@@ -1,4 +1,4 @@
-// src/types/index.ts
+// src/types.ts
 
 /**
  * Interface representing a destination retrieved from the backend API
@@ -8,6 +8,14 @@ export interface Destination {
     name: string;     // Name of the destination (e.g., "Paris")
     country: string;  // Country where the destination is located (e.g., "France")
     description: string; // Description of the destination
+  }
+  
+  /**
+   * Response format for API calls that return destinations
+   */
+  export interface DestinationResponse {
+    destinations: Destination[];
+    error?: string;
   }
   
   /**

@@ -1,5 +1,3 @@
-// src/types/index.ts
-
 /**
  * Interface representing a destination retrieved from the backend API
  */
