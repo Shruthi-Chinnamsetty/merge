@@ -147,7 +147,7 @@ const MapComponent = () => {
 // Main component with client-side only rendering
 const DestinationMap: React.FC = () => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden h-full">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden ">
       <div className="p-4 border-b">
         <h3 className="text-lg font-semibold text-gray-800">Interactive Map</h3>
       </div>
