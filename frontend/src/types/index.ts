@@ -8,8 +8,9 @@ export interface Destination {
     name: string;     // Name of the destination (e.g., "Paris")
     country: string;  // Country where the destination is located (e.g., "France")
     description: string; // Description of the destination
-  }
-  
+    latitude?: number;  // Optional latitude coordinate
+    longitude?: number; // Optional longitude coordinate
+}
   /**
    * Parameters for the advanced search functionality
    */

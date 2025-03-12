@@ -57,7 +57,10 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
       const data = await getAllDestinations();
       setDestinations(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      console.error("Error fetching destinations:", err);
+      setError(err instanceof Error ? err.message : 'Failed to connect to the server. Please try again later.');
+      // Set empty destinations array to avoid undefined issues
+      setDestinations([]);
     } finally {
       setLoading(false);
     }
@@ -142,7 +145,7 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
   );
 };
 
-
+// Hook to use the search context in functional components
 export const useSearchContext = (): SearchContextState => {
   const context = useContext(SearchContext);
   
