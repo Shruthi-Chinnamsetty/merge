@@ -16,7 +16,7 @@ interface DestinationWithCoords extends Destination {
 const DEFAULT_CENTER: [number, number] = [48.8566, 2.3522]; // Paris coordinates
 const DEFAULT_ZOOM = 5;
 
-// Sample coordinates for demo purposes - you'll need to add these to your Destination type
+// Sample coordinates for demo purposes as fallback
 const coordinatesMap: Record<string, [number, number]> = {
   "Paris": [48.8566, 2.3522],
   "London": [51.5074, -0.1278],
@@ -25,8 +25,7 @@ const coordinatesMap: Record<string, [number, number]> = {
   "Amsterdam": [52.3676, 4.9041],
   "Berlin": [52.5200, 13.4050],
   "Prague": [50.0755, 14.4378],
-  "Vienna": [48.2082, 16.3738],
-  // Add more destinations as needed
+  "Vienna": [48.2082, 16.3738]
 };
 
 // Create a map component that will only be loaded on the client side
@@ -100,6 +99,7 @@ const MapComponent = () => {
     
     // Add markers for each destination
     const bounds = leaflet.latLngBounds([]);
+    let markersAdded = 0;
     
     destinations.forEach((destination) => {
       // Cast to our augmented type to avoid TypeScript errors
@@ -110,18 +110,22 @@ const MapComponent = () => {
         const coords: [number, number] = [dest.latitude, dest.longitude];
         addMarker(coords, destination);
         bounds.extend(coords);
+        markersAdded++;
       } 
       // Fall back to the hardcoded coordinates if needed
       else if (coordinatesMap[destination.name]) {
         const coords = coordinatesMap[destination.name];
         addMarker(coords, destination);
         bounds.extend(coords);
+        markersAdded++;
       }
     });
     
     // Adjust map view to show all markers
-    if (bounds.isValid()) {
+    if (bounds.isValid() && markersAdded > 0) {
       leafletMap.current.fitBounds(bounds, { padding: [50, 50] });
+    } else {
+      leafletMap.current.setView(DEFAULT_CENTER, DEFAULT_ZOOM);
     }
   }, [destinations, leaflet]);
 

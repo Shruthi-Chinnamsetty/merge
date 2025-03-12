@@ -58,6 +58,10 @@ public class GeoNamesService {
         destination.setCountry((String) geoname.get("countryName"));
         destination.setDescription("A destination in " + geoname.get("countryName"));
         
+        if (geoname.containsKey("lat") && geoname.containsKey("lng")) {
+            destination.setLatitude(Double.parseDouble(geoname.get("lat").toString()));
+            destination.setLongitude(Double.parseDouble(geoname.get("lng").toString()));
+        }
         
        
         return destination;

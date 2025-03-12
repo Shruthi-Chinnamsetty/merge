@@ -5,8 +5,7 @@ import lombok.*;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor // Zero-argument constructor
 @Table(name = "destinations")
 public class Destination {
     @Id
@@ -16,19 +15,25 @@ public class Destination {
     private String name;
     private String country;
     private String description;
+    private Double latitude;
+    private Double longitude;
     
-    // You can add additional searchable fields below
-    // Examples:
-    // private String category;
-    // private Double rating;
-    // private String imageUrl;
-    // private Boolean isFeatured;
+    // Add a constructor with all the original fields
+    public Destination(Long id, String name, String country, String description) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
+        this.description = description;
+    }
     
-    // For tags or multiple categories, you could use:
-    // @ElementCollection
-    // private List<String> tags;
-    
-    // For more advanced relationships:
-    // @OneToMany(mappedBy = "destination", cascade = CascadeType.ALL)
-    // private List<Review> reviews;
+    // Add a constructor with all fields including the new ones
+    public Destination(Long id, String name, String country, String description, 
+                       Double latitude, Double longitude) {
+        this.id = id;
+        this.name = name;
+        this.country = country;
+        this.description = description;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }

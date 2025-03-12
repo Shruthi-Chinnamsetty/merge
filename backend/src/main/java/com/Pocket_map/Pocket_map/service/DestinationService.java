@@ -11,7 +11,8 @@ import java.util.List;
 public class DestinationService {
     @Autowired
     private DestinationRepository destinationRepository;
-    
+    private Double latitude;
+    private Double longitude;    
     @Autowired
     private GeoNamesService geoNamesService;
 
@@ -52,5 +53,21 @@ public class DestinationService {
         return nameResults.stream()
             .filter(d -> d.getCountry().toLowerCase().contains(country.toLowerCase()))
             .collect(Collectors.toList());
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+    
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+    
+    public Double getLongitude() {
+        return longitude;
+    }
+    
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

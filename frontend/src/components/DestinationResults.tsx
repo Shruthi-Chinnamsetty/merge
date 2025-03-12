@@ -69,9 +69,9 @@ const DestinationResults = () => {
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence>
-          {destinations.map((destination) => (
+          {destinations.map((destination, index) => (
             <motion.div
-              key={destination.id}
+              key={destination.id ? destination.id.toString() : `destination-${destination.name}-${destination.country}-${index}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
