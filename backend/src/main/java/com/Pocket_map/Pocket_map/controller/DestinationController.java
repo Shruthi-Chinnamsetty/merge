@@ -1,5 +1,6 @@
 package com.Pocket_map.Pocket_map.controller;
 
+import com.Pocket_map.Pocket_map.service.GeoNamesService;
 import com.Pocket_map.Pocket_map.model.Destination;
 import com.Pocket_map.Pocket_map.service.DestinationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,4 +38,14 @@ public class DestinationController {
         Destination savedDestination = destinationService.addDestination(destination);
         return ResponseEntity.ok(savedDestination);
     }
+
+    @Autowired
+    private GeoNamesService geoNamesService;
+
+    @GetMapping("/test-geonames")
+    public List<Destination> testGeoNames(@RequestParam String query) {
+        return geoNamesService.searchLocations(query);
+    }
+
+
 }

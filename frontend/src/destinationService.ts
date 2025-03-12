@@ -1,106 +1,57 @@
-// src/destinationService.ts
+package com.Pocket_map.Pocket_map.service;
 
-import { Destination, AdvancedSearchParams } from "./types";
+import com.Pocket_map.Pocket_map.model.Destination;
+import com.Pocket_map.Pocket_map.repository.DestinationRepository;
 
-// Base URL for the API
-const API_BASE_URL = "http://localhost:8080/api/destinations";
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.stream.Collectors;
 
-/**
- * Fetches all destinations from the backend API
- * @returns Promise with an array of Destination objects
- */
-export const getAllDestinations = async (): Promise<Destination[]> => {
-  try {
-    const response = await fetch(API_BASE_URL);
+@Service
+public class DestinationService {
+    @Autowired
+    private DestinationRepository destinationRepository;
     
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    @Autowired
+    private GeoNamesService geoNamesService;
+
+    public List<Destination> getAllDestinations() {
+        return destinationRepository.findAll();
+    }
+
+    public Destination addDestination(Destination destination) {
+        return destinationRepository.save(destination);
     }
     
-    const data = await response.json();
-    return data as Destination[];
-  } catch (error) {
-    console.error("Failed to fetch destinations:", error);
-    throw error;
-  }
-};
-
-/**
- * Searches destinations by a generic search term
- * @param query - Search term to find across name, country, and description
- * @returns Promise with an array of matching Destination objects
- */
-export const searchDestinations = async (query: string): Promise<Destination[]> => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/search?q=${encodeURIComponent(query)}`);
-    
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+    public List<Destination> searchDestinations(String searchTerm) {
+        if (searchTerm == null || searchTerm.trim().isEmpty()) {
+            return getAllDestinations();
+        }
+        // Use GeoNamesService for searching
+        return geoNamesService.searchLocations(searchTerm);
     }
     
-    const data = await response.json();
-    return data as Destination[];
-  } catch (error) {
-    console.error(`Failed to search destinations with query '${query}':`, error);
-    throw error;
-  }
-};
-
-/**
- * Performs an advanced search with specific name and country criteria
- * @param params - Object containing name and country filter parameters
- * @returns Promise with an array of matching Destination objects
- */
-export const advancedSearch = async (params: AdvancedSearchParams): Promise<Destination[]> => {
-  try {
-    // Build query string from the provided parameters
-    const queryParams = new URLSearchParams();
-    
-    if (params.name) {
-      queryParams.append("name", params.name);
+    public List<Destination> searchByNameAndCountry(String name, String country) {
+        if ((name == null || name.trim().isEmpty()) && 
+            (country == null || country.trim().isEmpty())) {
+            return getAllDestinations();
+        }
+        
+        // If only country is provided
+        if (name == null || name.trim().isEmpty()) {
+            return geoNamesService.searchLocations(country);
+        }
+        
+        // If only name is provided
+        if (country == null || country.trim().isEmpty()) {
+            return geoNamesService.searchLocations(name);
+        }
+        
+        // If both name and country are provided, search by name and filter by country
+        List<Destination> nameResults = geoNamesService.searchLocations(name);
+        return nameResults.stream()
+            .filter(d -> d.getCountry().toLowerCase().contains(country.toLowerCase()))
+            .collect(Collectors.toList());
     }
-    
-    if (params.country) {
-      queryParams.append("country", params.country);
-    }
-    
-    const response = await fetch(`${API_BASE_URL}/search/advanced?${queryParams.toString()}`);
-    
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
-    }
-    
-    const data = await response.json();
-    return data as Destination[];
-  } catch (error) {
-    console.error("Failed to perform advanced search:", error);
-    throw error;
-  }
-};
-
-/**
- * Adds a new destination to the backend
- * @param destination - The destination object to add (without id)
- * @returns Promise with the newly created Destination (including id)
- */
-export const addDestination = async (destination: Omit<Destination, 'id'>): Promise<Destination> => {
-  try {
-    const response = await fetch(API_BASE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(destination),
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
-    }
-    
-    const data = await response.json();
-    return data as Destination;
-  } catch (error) {
-    console.error("Failed to add destination:", error);
-    throw error;
-  }
-};
+}
