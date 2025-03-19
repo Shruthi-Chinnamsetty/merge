@@ -4,6 +4,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSearchContext } from "../contexts/SearchContext";
 import { Destination } from "../types";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import dynamic from 'next/dynamic';
 
 // Augment the Destination type locally
@@ -147,12 +148,14 @@ const MapComponent = () => {
 // Main component with client-side only rendering
 const DestinationMap: React.FC = () => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden ">
-      <div className="p-4 border-b">
-        <h3 className="text-lg font-semibold text-gray-800">Interactive Map</h3>
-      </div>
-      <MapComponent />
-    </div>
+    <Card>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg">Interactive Map</CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">
+        <MapComponent />
+      </CardContent>
+    </Card>
   );
 };
 

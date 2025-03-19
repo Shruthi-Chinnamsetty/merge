@@ -4,6 +4,8 @@
 import React from "react";
 import { useSearchContext } from "../contexts/SearchContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 const DestinationResults = () => {
   const { destinations, loading, error, searchQuery, isAdvancedSearch, advancedSearchParams } = useSearchContext();
@@ -32,8 +34,8 @@ const DestinationResults = () => {
     return (
       <div className="w-full py-10 flex justify-center">
         <div className="flex flex-col items-center">
-          <div className="w-12 h-12 border-t-4 border-green-500 rounded-full animate-spin mb-4"></div>
-          <p className="text-gray-600">Loading destinations...</p>
+          <div className="w-12 h-12 border-t-4 border-primary rounded-full animate-spin mb-4"></div>
+          <p className="text-muted-foreground">Loading destinations...</p>
         </div>
       </div>
     );
@@ -42,11 +44,11 @@ const DestinationResults = () => {
   // If error, show error message
   if (error) {
     return (
-      <div className="w-full py-6 px-4">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          <p className="font-bold">Error</p>
-          <p>{error}</p>
-        </div>
+      <div className="w-full py-6">
+        <Alert variant="destructive">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       </div>
     );
   }
@@ -55,7 +57,7 @@ const DestinationResults = () => {
   if (destinations.length === 0) {
     return (
       <div className="w-full py-8 text-center">
-        <p className="text-gray-500">{getNoResultsMessage()}</p>
+        <p className="text-muted-foreground">{getNoResultsMessage()}</p>
       </div>
     );
   }
@@ -63,7 +65,7 @@ const DestinationResults = () => {
   // Render destinations grid
   return (
     <div className="w-full py-8">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800">
+      <h2 className="text-2xl font-bold mb-6">
         {destinations.length} {destinations.length === 1 ? 'Destination' : 'Destinations'} Found
       </h2>
       
@@ -76,13 +78,14 @@ const DestinationResults = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
             >
-              <div className="p-5">
-                <h3 className="text-xl font-semibold text-gray-800 mb-1">{destination.name}</h3>
-                <p className="text-sm text-gray-500 mb-3">{destination.country}</p>
-                <p className="text-gray-700">{destination.description}</p>
-              </div>
+              <Card className="h-full hover:shadow-lg transition-shadow">
+                <CardContent className="p-5">
+                  <CardTitle className="text-xl mb-1">{destination.name}</CardTitle>
+                  <CardDescription className="mb-3">{destination.country}</CardDescription>
+                  <p className="text-card-foreground">{destination.description}</p>
+                </CardContent>
+              </Card>
             </motion.div>
           ))}
         </AnimatePresence>

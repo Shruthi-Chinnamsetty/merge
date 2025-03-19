@@ -16,7 +16,7 @@ const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
       <div className="relative w-16 h-16 mb-4">
         {/* Outer circle */}
         <motion.div
-          className="absolute inset-0 rounded-full border-4 border-green-200"
+          className="absolute inset-0 rounded-full border-4 border-primary/20"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.4 }}
@@ -24,7 +24,7 @@ const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
         
         {/* Spinning circle */}
         <motion.div
-          className="absolute inset-0 rounded-full border-4 border-transparent border-t-green-600"
+          className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary"
           animate={{ rotate: 360 }}
           transition={{ 
             duration: 1.2, 
@@ -35,7 +35,7 @@ const LoadingIndicator: React.FC<LoadingIndicatorProps> = ({
       </div>
       
       <motion.p
-        className="text-gray-600 font-medium"
+        className="text-muted-foreground font-medium"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}

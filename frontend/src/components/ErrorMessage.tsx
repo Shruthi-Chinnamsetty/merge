@@ -3,6 +3,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 interface ErrorMessageProps {
   message: string;
@@ -44,27 +45,31 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry, onClear }
           
           <div className="mt-3 flex space-x-2">
             {onRetry && (
-              <button
-                type="button"
+              <Button
+                variant="outline"
+                size="sm"
                 onClick={onRetry}
-                className="bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1.5 rounded text-xs font-medium transition-colors"
+                className="bg-red-100 hover:bg-red-200 text-red-800 border-red-200 text-xs"
               >
                 Try Again
-              </button>
+              </Button>
             )}
             
-            <button
-              type="button"
+            <Button
+              variant="outline"
+              size="sm"
               onClick={onClear}
-              className="bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 px-3 py-1.5 rounded text-xs font-medium transition-colors"
+              className="bg-white text-gray-700 text-xs"
             >
               Dismiss
-            </button>
+            </Button>
           </div>
         </div>
         
-        <button
-          className="ml-auto flex-shrink-0 text-red-500 hover:text-red-700 focus:outline-none"
+        <Button
+          variant="ghost"
+          size="sm"
+          className="ml-auto flex-shrink-0 text-red-500 hover:text-red-700 hover:bg-transparent p-0 h-auto"
           onClick={onClear}
           aria-label="Close"
         >
@@ -75,7 +80,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry, onClear }
               clipRule="evenodd"
             />
           </svg>
-        </button>
+        </Button>
       </div>
     </motion.div>
   );

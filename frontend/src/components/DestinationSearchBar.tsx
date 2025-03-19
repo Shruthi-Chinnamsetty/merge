@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Input } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useSearchContext } from "../contexts/SearchContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { AdvancedSearchParams } from "../types";
@@ -43,12 +43,14 @@ const DestinationSearchBar = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-4 bg-white rounded-2xl shadow-lg w-full max-w-md">
+    <div className="flex flex-col gap-4 p-4 bg-card rounded-2xl shadow-lg w-full max-w-md">
       <div className="flex justify-between items-center">
         <h1 className="text-xl font-semibold">Find Your Next Destination</h1>
         <Button 
           onClick={toggleSearchMode}
-          className="text-sm bg-transparent text-gray-700 hover:bg-gray-100"
+          variant="ghost"
+          size="sm"
+          className="text-sm"
         >
           {isAdvancedSearch ? "Simple Search" : "Advanced Search"}
         </Button>
@@ -81,18 +83,17 @@ const DestinationSearchBar = () => {
               value={localAdvancedParams.name || ""}
               onChange={(e) => updateAdvancedParam("name", e.target.value)}
               placeholder="Destination name..."
-              className="border-gray-300"
             />
             <Input
               value={localAdvancedParams.country || ""}
               onChange={(e) => updateAdvancedParam("country", e.target.value)}
               placeholder="Country..."
-              className="border-gray-300"
             />
             <Button 
               type="submit" 
               disabled={loading}
-              className="bg-green-600 hover:bg-green-700"
+              variant="default"
+              className="bg-primary hover:bg-primary/90"
             >
               {loading ? "Searching..." : "Search"}
             </Button>
@@ -111,12 +112,12 @@ const DestinationSearchBar = () => {
               value={localQuery}
               onChange={(e) => setLocalQuery(e.target.value)}
               placeholder="Enter a destination..."
-              className="border-gray-300"
             />
             <Button 
               type="submit" 
               disabled={loading}
-              className="bg-green-600 hover:bg-green-700"
+              variant="default"
+              className="bg-primary hover:bg-primary/90"
             >
               {loading ? "Searching..." : "Search"}
             </Button>
