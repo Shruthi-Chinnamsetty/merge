@@ -16,7 +16,7 @@ import { format, parse, startOfWeek, getDay, addDays } from "date-fns"
 import { MapPin, Plus, Calendar as CalendarIcon, Plane, Train, Bus, Car, Trash2, Edit, X } from "lucide-react"
 
 // These are the type definitions
-import type { Schedule } from "../types"
+import type { Schedule } from "../types/index"
 
 // These are UI components from shadcn/ui
 import { Button } from "@/components/ui/button"
@@ -41,7 +41,6 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 
 // This is the HTTP client for the API calls using axios
 import axios from 'axios';
-
 
 // This is the date localiser for the calendar
 const localizer = dateFnsLocalizer({

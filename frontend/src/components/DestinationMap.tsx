@@ -35,7 +35,7 @@ const MapComponent = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const [leaflet, setLeaflet] = useState<any>(null);
   const leafletMap = useRef<any>(null);
-  const markersLayer = useRef<any>(null);
+  const markersLayer = useRef<never>(null);
 
   // Only import Leaflet on the client side
   useEffect(() => {

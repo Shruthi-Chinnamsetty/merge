@@ -9,21 +9,26 @@ const API_BASE_URL = "http://localhost:8080/api/destinations";
  * Fetches all destinations from the backend API
  * @returns Promise with an array of Destination objects
  */
-export const getAllDestinations = async (): Promise<Destination[]> => {
+export async function getAllDestinations(): Promise<Destination[]> {
+  const token = localStorage.getItem('token');
+  
   try {
-    const response = await fetch(API_BASE_URL);
+    const response = await fetch(`${API_BASE_URL}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     
     if (!response.ok) {
-      throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      throw new Error(`${response.status} - ${response.statusText}`);
     }
     
-    const data = await response.json();
-    return data as Destination[];
+    return await response.json();
   } catch (error) {
-    console.error("Failed to fetch destinations:", error);
+    console.error("Error fetching destinations:", error);
     throw error;
   }
-};
+}
 
 /**
  * Searches destinations by a generic search term
