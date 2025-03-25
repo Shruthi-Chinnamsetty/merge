@@ -24,17 +24,25 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         
         String path = request.getServletPath();
+        System.out.println("JWTAuthenticationFilter processing: " + path);
         
         // Skip filter for login and registration endpoints only
         if (path.equals("/api/login") || path.equals("/api/users") || path.equals("/api/user")) {
+            System.out.println("Skipping authentication for public endpoint: " + path);
             filterChain.doFilter(request, response);
             return;
         }
         
         // For other endpoints including /api/verify-token, validate JWT
+        String token = request.getHeader("Authorization");
+        System.out.println("Authorization header: " + token);
+        
         Authentication auth = jwtService.getAuthentication(request);
         if (auth != null) {
+            System.out.println("Authentication successful for: " + auth.getName());
             SecurityContextHolder.getContext().setAuthentication(auth);
+        } else {
+            System.out.println("Authentication failed for path: " + path);
         }
             
         filterChain.doFilter(request, response);

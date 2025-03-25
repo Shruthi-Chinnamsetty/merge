@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import LanguagePhrasesComponent from "@/components/PhrasesComponent";
 import Scheduler from "@/components/TravelScheduler";
+import Navigation from "@/components/Navigation";
 
 function HomeContent() {
   const { fetchAllDestinations, destinations, loading, error } = useSearchContext();
@@ -103,6 +104,7 @@ function HomeContent() {
 export default function Home() {
   return (
     <SearchProvider>
+      <Navigation/>
       <HomeContent />
     </SearchProvider>
   );

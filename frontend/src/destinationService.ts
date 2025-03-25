@@ -10,14 +10,8 @@ const API_BASE_URL = "http://localhost:8080/api/destinations";
  * @returns Promise with an array of Destination objects
  */
 export async function getAllDestinations(): Promise<Destination[]> {
-  const token = localStorage.getItem('token');
-  
   try {
-    const response = await fetch(`${API_BASE_URL}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    const response = await fetch(`${API_BASE_URL}`);
     
     if (!response.ok) {
       throw new Error(`${response.status} - ${response.statusText}`);
@@ -36,8 +30,14 @@ export async function getAllDestinations(): Promise<Destination[]> {
  * @returns Promise with an array of matching Destination objects
  */
 export const searchDestinations = async (query: string): Promise<Destination[]> => {
+  const token = localStorage.getItem('token');
+  
   try {
-    const response = await fetch(`${API_BASE_URL}/search?q=${encodeURIComponent(query)}`);
+    const response = await fetch(`${API_BASE_URL}/search?q=${encodeURIComponent(query)}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     
     if (!response.ok) {
       throw new Error(`Error: ${response.status} - ${response.statusText}`);
@@ -57,6 +57,8 @@ export const searchDestinations = async (query: string): Promise<Destination[]> 
  * @returns Promise with an array of matching Destination objects
  */
 export const advancedSearch = async (params: AdvancedSearchParams): Promise<Destination[]> => {
+  const token = localStorage.getItem('token');
+  
   try {
     // Build query string from the provided parameters
     const queryParams = new URLSearchParams();
@@ -69,7 +71,11 @@ export const advancedSearch = async (params: AdvancedSearchParams): Promise<Dest
       queryParams.append("country", params.country);
     }
     
-    const response = await fetch(`${API_BASE_URL}/search/advanced?${queryParams.toString()}`);
+    const response = await fetch(`${API_BASE_URL}/search/advanced?${queryParams.toString()}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
     
     if (!response.ok) {
       throw new Error(`Error: ${response.status} - ${response.statusText}`);
@@ -89,11 +95,14 @@ export const advancedSearch = async (params: AdvancedSearchParams): Promise<Dest
  * @returns Promise with the newly created Destination (including id)
  */
 export const addDestination = async (destination: Omit<Destination, 'id'>): Promise<Destination> => {
+  const token = localStorage.getItem('token');
+  
   try {
     const response = await fetch(API_BASE_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(destination),
     });

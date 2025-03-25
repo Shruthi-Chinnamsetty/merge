@@ -42,6 +42,9 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 // This is the HTTP client for the API calls using axios
 import axios from 'axios';
 
+// Add these imports at the top of your file
+import { getSchedules, createSchedule, updateSchedule, deleteSchedule } from '../scheduleService';
+
 // This is the date localiser for the calendar
 const localizer = dateFnsLocalizer({
   format,
@@ -145,47 +148,164 @@ function CustomToolbar(props: CustomToolbarProps) {
   );
 }
 
+type CalendarView = "month" | "week" | "day";
+
 export default function Scheduler() {
   const [schedules, setSchedules] = useState<Schedule[]>([])
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingSchedule, setEditingSchedule] = useState<Schedule | null>(null)
   const [formData, setFormData] = useState<Partial<Schedule>>(INITIAL_FORM_STATE)
   const [selectedSchedule, setSelectedSchedule] = useState<Schedule | null>(null)
-  const [viewType, setViewType] = useState("month")
+  const [viewType, setViewType] = useState<CalendarView>("month")
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const fetchSchedules = useCallback(async () => {
-    setIsLoading(true)
-    setErrorMessage(null)
+  // Add this function before the fetchSchedules function
+  const fetchSchedulesDirectly = async () => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(API_URL, {
+      if (!token) {
+        throw new Error("No authorization token found");
+      }
+      
+      console.log("Using direct fetch with token:", token.substring(0, 20) + "...");
+      
+      // Try with native fetch instead of axios
+      const response = await fetch("http://localhost:8080/api/schedules", {
+        method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
       });
-      if (response.status !== 200) throw new Error("Failed to fetch schedules")
-      const data = response.data
-      setSchedules(data)
+      
+      console.log("Response status:", response.status);
+      
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} - ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      console.log("Data received:", data);
+      setSchedules(data);
+      
     } catch (error) {
-      console.error("Error fetching schedules:", error)
-      setErrorMessage("Failed to fetch schedules. Please try again.")
+      console.error("Error in direct fetch:", error);
+      setErrorMessage(error.message || "Failed to fetch schedules");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [])
+  };
+
+  const resetAuthAndRedirect = () => {
+    // Don't remove token from localStorage
+    //localStorage.removeItem('token');
+    window.location.href = '/login';
+  };
+
+  // Update error handling in fetchSchedules to use this
+  const fetchSchedules = useCallback(async () => {
+    setIsLoading(true);
+    setErrorMessage(null);
+    try {
+      const data = await getSchedules();
+      setSchedules(data);
+    } catch (error) {
+      console.error("Error fetching schedules:", error);
+      setErrorMessage(error.message || "Failed to fetch schedules. Please try again.");
+      
+      // If it's an authentication error, reset and redirect
+      if (error.message && error.message.includes("login")) {
+        setTimeout(() => {
+          resetAuthAndRedirect();
+        }, 3000); // Give user 3 seconds to read the error message
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    fetchSchedules()
-  }, [fetchSchedules])
+    const loadSchedules = async () => {
+      try {
+        // First try the service method
+        await fetchSchedules();
+      } catch (error) {
+        console.log("Service method failed, trying direct fetch");
+        // If it fails, try the direct fetch method
+        await fetchSchedulesDirectly();
+      }
+    };
+    
+    loadSchedules();
+  }, [fetchSchedules]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     console.log("Token from localStorage:", token ? token.substring(0, 15) + "..." : "no token");
+  }, []);
+
+  // Add this useEffect to verify token when component mounts
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setErrorMessage("No authentication token found. Please login to continue.");
+    }
+  }, []);
+
+  // Add this at the beginning of your component
+  const verifyToken = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error("No token found in localStorage");
+        return false;
+      }
+      
+      // Try to access the destinations endpoint which we know works
+      const response = await fetch("http://localhost:8080/api/destinations", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
+      if (response.ok) {
+        console.log("Token is valid for destinations API");
+        return true;
+      } else {
+        console.error("Token validation failed:", response.status, response.statusText);
+        return false;
+      }
+    } catch (error) {
+      console.error("Token verification failed:", error);
+      return false;
+    }
+  };
+
+  // Add this useEffect to verify token on mount
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = localStorage.getItem('token');
+      console.log("Token from localStorage:", token ? `${token.substring(0, 20)}...` : "no token");
+      
+      if (!token) {
+        setErrorMessage("No authentication token found. Please login to continue.");
+        return;
+      }
+      
+      const isValid = await verifyToken();
+      if (!isValid) {
+        setErrorMessage("Your session appears to be invalid. Please login again.");
+      }
+    };
+    
+    checkToken();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -194,42 +314,13 @@ export default function Scheduler() {
     setSuccessMessage(null);
     
     try {
-      const token = localStorage.getItem('token');
-      const formattedData = {
-        ...formData,
-        startDate: formData.startDate ? format(new Date(formData.startDate), "yyyy-MM-dd'T'HH:mm:ss") : null,
-        endDate: formData.endDate ? format(new Date(formData.endDate), "yyyy-MM-dd'T'HH:mm:ss") : null,
-      };
-  
-      let response;
       if (editingSchedule) {
-        response = await fetch(`${API_URL}/${editingSchedule.id}`, {
-          method: "PUT",
-          headers: { 
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`  // Add token here
-          },
-          body: JSON.stringify(formattedData)
-        });
+        await updateSchedule(editingSchedule.id, formData);
+        setSuccessMessage("Your trip has been successfully updated!");
       } else {
-        response = await fetch(API_URL, {
-          method: "POST",
-          headers: { 
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`  // Add token here
-          },
-          body: JSON.stringify(formattedData)
-        });
+        await createSchedule(formData);
+        setSuccessMessage("Your trip has been successfully created!");
       }
-  
-      if (!response.ok) {
-        throw new Error("Failed to save schedule");
-      }
-  
-      // Show success message
-      setSuccessMessage(editingSchedule ? 
-        "Your trip has been successfully updated!" : 
-        "Your trip has been successfully created!");
       
       await fetchSchedules();
       
@@ -240,33 +331,23 @@ export default function Scheduler() {
       }, 2000);
       
     } catch (error) {
-      setErrorMessage("Failed to save schedule");
+      setErrorMessage(error.message || "Failed to save schedule");
       console.error("Error saving schedule:", error);
     }
-  };  
+  };
 
   const handleDelete = async (id: number) => {
     setErrorMessage(null);
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/${id}`, { 
-        method: "DELETE",
-        headers: {
-          "Authorization": `Bearer ${token}`  // Add token here
-        }
-      });
-      
-      if (!response.ok) throw new Error("Failed to delete schedule")
-      
-      await fetchSchedules()
-      setSelectedSchedule(null)
-      setIsDetailsOpen(false)
-      
+      await deleteSchedule(id);
+      await fetchSchedules();
+      setSelectedSchedule(null);
+      setIsDetailsOpen(false);
     } catch (error) {
-      console.error("Error deleting schedule:", error)
-      setErrorMessage("Failed to delete schedule. Please try again.")
+      console.error("Error deleting schedule:", error);
+      setErrorMessage(error.message || "Failed to delete schedule. Please try again.");
     }
-  }
+  };
 
   const handleEdit = (schedule: Schedule) => {
     setEditingSchedule(schedule)
@@ -307,6 +388,17 @@ export default function Scheduler() {
             <div>
               <p className="font-bold">Error</p>
               <p className="text-sm">{errorMessage}</p>
+              {errorMessage.includes("login") && (
+                <button 
+                  onClick={() => { 
+                    localStorage.removeItem('token');
+                    window.location.href = '/login';
+                  }}
+                  className="mt-2 bg-red-500 text-white px-3 py-1 rounded text-xs"
+                >
+                  Login Again
+                </button>
+              )}
             </div>
             <button 
               onClick={() => setErrorMessage(null)} 
@@ -572,8 +664,8 @@ export default function Scheduler() {
                     week: true,
                     day: true,
                   }}
-                  view={viewType as any}
-                  onView={(view) => setViewType(view)}
+                  view={viewType}
+                  onView={(view) => setViewType(view as CalendarView)}
                   popup
                   selectable
                   onSelectEvent={(event) => openDetails(event.resource)}

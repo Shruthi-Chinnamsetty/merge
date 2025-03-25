@@ -41,9 +41,10 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
                 .requestMatchers("/api/phrases/**").permitAll()
+                .requestMatchers("/api/destinations/**").permitAll() // Allow all destination endpoints
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                // Protected endpoints - remove the permitAll() for schedules
-                // .requestMatchers("/api/schedules/**").permitAll() - REMOVE THIS LINE
+                
+                // Protected endpoints
                 .anyRequest().authenticated())
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
             
