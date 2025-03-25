@@ -1,5 +1,8 @@
 // src/contexts/SearchContext.tsx
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+"use client";
+
+import React, { createContext, useState, useContext, ReactNode, useCallback } from 'react';
+import axios from 'axios';
 import { Destination, AdvancedSearchParams } from '../types';
 import { 
   getAllDestinations, 
@@ -50,21 +53,20 @@ export const SearchProvider: React.FC<SearchProviderProps> = ({ children }) => {
   const [isAdvancedSearch, setIsAdvancedSearch] = useState<boolean>(false);
 
   // Fetch all destinations
-  const fetchAllDestinations = async (): Promise<void> => {
+  const fetchAllDestinations = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await getAllDestinations();
-      setDestinations(data);
+      
+      const response = await axios.get('http://localhost:8080/api/destinations');
+      setDestinations(response.data);
     } catch (err) {
       console.error("Error fetching destinations:", err);
-      setError(err instanceof Error ? err.message : 'Failed to connect to the server. Please try again later.');
-      // Set empty destinations array to avoid undefined issues
-      setDestinations([]);
+      setError("Failed to load destinations");
     } finally {
       setLoading(false);
     }
-  };
+  }, []); // Empty dependency array if it doesn't depend on any state/props
 
   // Perform a basic search
   const performSearch = async (query: string): Promise<void> => {

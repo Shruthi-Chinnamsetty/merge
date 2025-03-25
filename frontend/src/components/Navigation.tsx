@@ -1,4 +1,3 @@
-// src/components/Navigation.tsx
 "use client"
 
 import Link from "next/link"
@@ -23,7 +22,7 @@ export default function Navigation() {
                 href="/"
                 className={cn(
                   "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
-                  pathname === "/"
+                  (!pathname || pathname === "/" || pathname === "/?component=destinations")
                     ? "border-primary text-gray-900"
                     : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                 )}
@@ -42,10 +41,10 @@ export default function Navigation() {
                 Community
               </Link>
               <Link
-                href="/phrases"
+                href="/?component=phrases"
                 className={cn(
                   "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
-                  pathname.startsWith("/PhrasesComponent")
+                  pathname === "/?component=phrases"
                     ? "border-primary text-gray-900"
                     : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                 )}
@@ -53,10 +52,10 @@ export default function Navigation() {
                 Phrases
               </Link>
               <Link
-                href="/scheduler"
+                href="/?component=scheduler"
                 className={cn(
                   "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
-                  pathname.startsWith("/TravelScheduler")
+                  pathname === "/?component=scheduler"
                     ? "border-primary text-gray-900"
                     : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                 )}
@@ -70,4 +69,3 @@ export default function Navigation() {
     </nav>
   )
 }
-
