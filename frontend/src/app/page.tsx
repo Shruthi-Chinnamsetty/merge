@@ -10,6 +10,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import LanguagePhrasesComponent from "@/components/PhrasesComponent";
 import Scheduler from "@/components/TravelScheduler";
+import { CycleStationsComponent } from "@/components/CycleStationsComponent";
 import Navigation from "@/components/Navigation";
 
 function HomeContent() {
@@ -30,6 +31,8 @@ function HomeContent() {
       setActiveComponent("phrases");
     } else if (componentParam === "scheduler") {
       setActiveComponent("scheduler");
+    } else if (componentParam === "cycle") {
+      setActiveComponent("cycle");
     } else {
       setActiveComponent("destinations");
     }
@@ -64,6 +67,8 @@ function HomeContent() {
         return <LanguagePhrasesComponent />;
       case "scheduler":
         return <Scheduler />;
+      case "cycle":
+        return <CycleStationsComponent />;
       case "destinations":
       default:
         return (

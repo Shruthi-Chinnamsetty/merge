@@ -1,11 +1,13 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
 import { cn } from "@/lib/utils"
 
 export default function Navigation() {
   const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const componentParam = searchParams.get("component")
 
   return (
     <nav className="bg-white shadow-sm">
@@ -22,7 +24,7 @@ export default function Navigation() {
                 href="/"
                 className={cn(
                   "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
-                  (!pathname || pathname === "/" || pathname === "/?component=destinations")
+                  (!pathname || pathname === "/" || pathname === "/?component=destinations") && !componentParam
                     ? "border-primary text-gray-900"
                     : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                 )}
@@ -44,7 +46,7 @@ export default function Navigation() {
                 href="/?component=phrases"
                 className={cn(
                   "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
-                  pathname === "/?component=phrases"
+                  componentParam === "phrases"
                     ? "border-primary text-gray-900"
                     : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                 )}
@@ -55,12 +57,23 @@ export default function Navigation() {
                 href="/?component=scheduler"
                 className={cn(
                   "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
-                  pathname === "/?component=scheduler"
+                  componentParam === "scheduler"
                     ? "border-primary text-gray-900"
                     : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
                 )}
               >
                 Scheduler
+              </Link>
+              <Link
+                href="/?component=cycle"
+                className={cn(
+                  "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
+                  componentParam === "cycle"
+                    ? "border-primary text-gray-900"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                )}
+              >
+                Cycle Stations
               </Link>
             </div>
           </div>

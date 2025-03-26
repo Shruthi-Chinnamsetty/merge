@@ -82,6 +82,13 @@
             <scope>runtime</scope>
         </dependency>
         
+        <!-- JSON Dependency -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
+        </dependency>
+        
         <!-- Development Tools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -41,11 +41,16 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/user").permitAll()
                 .requestMatchers("/api/phrases/**").permitAll()
-                .requestMatchers("/api/destinations/**").permitAll() // Allow all destination endpoints
+                .requestMatchers("/api/destinations/**").permitAll()
+                .requestMatchers("/api/schedules/**").permitAll() // Added for schedules API
+                .requestMatchers("/api/cycle-stations/**").permitAll() // Added for cycle stations API
+                .requestMatchers("/api/**").permitAll() // General API access
+                .requestMatchers("/h2-console/**").permitAll() // H2 console access
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 
                 // Protected endpoints
                 .anyRequest().authenticated())
+            .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // For H2 console
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
             
         return http.build();
