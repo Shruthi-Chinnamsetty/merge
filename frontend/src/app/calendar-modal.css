@@ -1,0 +1,20 @@
+
+.dialog-content {
+  @apply p-6;
+}
+
+.dialog-header {
+  @apply pb-6;
+}
+
+.dialog-footer {
+  @apply mt-6;
+}
+
+.form-label {
+  @apply text-sm font-medium text-foreground;
+}
+
+.form-input {
+  @apply w-full;
+}
