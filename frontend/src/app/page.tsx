@@ -12,6 +12,8 @@ import LanguagePhrasesComponent from "@/components/PhrasesComponent";
 import Scheduler from "@/components/TravelScheduler";
 import { CycleStationsComponent } from "@/components/CycleStationsComponent";
 import Navigation from "@/components/Navigation";
+// Import the booking component directly
+import BookingsPage from "@/app/hotelbooking/booking";
 
 function HomeContent() {
   const { fetchAllDestinations, destinations, loading, error } = useSearchContext();
@@ -33,6 +35,8 @@ function HomeContent() {
       setActiveComponent("scheduler");
     } else if (componentParam === "cycle") {
       setActiveComponent("cycle");
+    } else if (componentParam === "hotelbooking") {
+      setActiveComponent("hotelbooking");
     } else {
       setActiveComponent("destinations");
     }
@@ -69,6 +73,9 @@ function HomeContent() {
         return <Scheduler />;
       case "cycle":
         return <CycleStationsComponent />;
+      case "hotelbooking":
+        // Directly render the BookingsPage component
+        return <BookingsPage />;
       case "destinations":
       default:
         return (

@@ -75,6 +75,17 @@ export default function Navigation() {
               >
                 Cycle Stations
               </Link>
+              <Link
+                href="/?component=hotelbooking"
+                className={cn(
+                  "inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium",
+                  componentParam === "hotelbooking"
+                    ? "border-primary text-gray-900"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700",
+                )}
+              >
+                Hotel Booking
+              </Link>
             </div>
           </div>
         </div>

@@ -29,7 +29,7 @@
   @media (prefers-color-scheme: dark) {
     :root {
       --background: #0a0a0a;
-      --foreground: #ededed;
+      --foreground:rgb(227, 236, 212);
   
       --card: 222.2 84% 4.9%;
       --card-foreground: 210 40% 98%;
