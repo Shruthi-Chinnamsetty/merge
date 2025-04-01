@@ -7,6 +7,8 @@ import "../app/calendar-modal.css"
 
 // These are the react hooks
 import { useState, useEffect, useCallback } from "react"
+// Add this after your other imports
+import styled from "@emotion/styled"
 
 // These are the utilities for the calendar library and date
 import { Calendar, dateFnsLocalizer, Views } from "react-big-calendar"
@@ -44,6 +46,27 @@ import axios from 'axios';
 
 // Add these imports at the top of your file
 import { getSchedules, createSchedule, updateSchedule, deleteSchedule } from '../scheduleService';
+
+// Add this after your imports but before your component
+// Update the DateInput component with stronger styling
+const DateInput = styled(Input)`
+  &::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(100%) !important;
+    opacity: 0.9;
+    cursor: pointer;
+  }
+  
+  /* For Firefox */
+  &::-moz-calendar-picker-indicator {
+    filter: invert(1) brightness(100%) !important;
+    opacity: 0.9;
+  }
+  
+  /* For Edge/IE */
+  &::-ms-clear {
+    display: none;
+  }
+`
 
 // This is the date localiser for the calendar
 const localizer = dateFnsLocalizer({
@@ -515,7 +538,7 @@ export default function Scheduler() {
                         <Label htmlFor="startDate" className="text-sm font-medium">
                           Start Date
                         </Label>
-                        <Input
+                        <DateInput
                           id="startDate"
                           type="datetime-local"
                           value={formData.startDate ? format(new Date(formData.startDate), "yyyy-MM-dd'T'HH:mm") : ''}
@@ -531,7 +554,7 @@ export default function Scheduler() {
                         <Label htmlFor="endDate" className="text-sm font-medium">
                           End Date
                         </Label>
-                        <Input
+                        <DateInput
                           id="endDate"
                           type="datetime-local"
                           value={formData.endDate ? format(new Date(formData.endDate), "yyyy-MM-dd'T'HH:mm") : ''}
@@ -682,10 +705,9 @@ export default function Scheduler() {
                   components={{
                     event: (props) => {
                       const category = CATEGORIES.find((c) => c.value === props.event.resource.category);
-                      // Extract color values from category classes
-                      const borderColorClass = category?.color.replace('bg-', 'border-').replace('100', '400');
-                      // Extract background color for dots - make it match category color exactly 
-                      const bgColorClass = category?.color.split(' ')[0];
+                      
+                      // Extract background color for dots - convert from light to solid color
+                      const bgColor = category?.color.split(' ')[0].replace('100', '500');
                       
                       // Determine if this is an event segment that continues from previous/to next rows
                       const isFirstSegment = !props.continuesPrior;
@@ -698,18 +720,17 @@ export default function Scheduler() {
                               <div className="relative w-full h-full">
                                 {/* Line connecting dots */}
                                 <div 
-                                  className={`absolute top-1/2 left-0 right-0`}
+                                  className={`absolute top-1/2 left-0 right-0 ${bgColor}`}
                                   style={{ 
                                     transform: 'translateY(-50%)', 
-                                    height: '1px', 
-                                    backgroundColor: 'rgba(0,0,0,0)' 
+                                    height: '2px'
                                   }}
                                 ></div>
                                 
                                 {/* Start date dot */}
                                 {isFirstSegment && (
                                   <div 
-                                    className={`absolute left-0 top-1/2 w-3 h-3 rounded-full ${bgColorClass} border ${borderColorClass ? borderColorClass : 'border-gray-400'}`}
+                                    className={`absolute left-0 top-1/2 w-3 h-3 rounded-full ${bgColor}`}
                                     style={{ transform: 'translate(-1.5px, -50%)', zIndex: 10 }}
                                   ></div>
                                 )}
@@ -717,7 +738,7 @@ export default function Scheduler() {
                                 {/* End date dot */}
                                 {isLastSegment && (
                                   <div 
-                                    className={`absolute right-0 top-1/2 w-3 h-3 rounded-full ${bgColorClass} border ${borderColorClass ? borderColorClass : 'border-gray-400'}`}
+                                    className={`absolute right-0 top-1/2 w-3 h-3 rounded-full ${bgColor}`}
                                     style={{ transform: 'translate(1.5px, -50%)', zIndex: 10 }}
                                   ></div>
                                 )}
@@ -729,15 +750,7 @@ export default function Scheduler() {
                               </div>
                             </TooltipTrigger>
                             <TooltipContent>
-                              <div className="text-sm">
-                                <p className="font-semibold">{props.title}</p>
-                                <p>{formatDate(props.event.start)} to {formatDate(props.event.end)}</p>
-                                <p>{getDuration(props.event.start, props.event.end)} | {props.event.resource.distance} km</p>
-                                <div className="flex items-center gap-1 mt-1">
-                                  {getTravelModeIcon(props.event.resource.travelMode)}
-                                  <span>{props.event.resource.travelMode}</span>
-                                </div>
-                              </div>
+                              {/* Rest of tooltip content */}
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>
@@ -868,7 +881,7 @@ export default function Scheduler() {
                             {schedule.category}
                           </Badge>
                         </div>
-                        <div className="text-sm text-muted-foreground mt-2 flex items-center gap-2">
+                        <div className="text-sm text-muted-foreground mt-2 flex items-center background-color-white gap-2">
                           <CalendarIcon className="h-3.5 w-3.5" />
                           {formatDate(schedule.startDate)} ({getDuration(schedule.startDate, schedule.endDate)})
                         </div>

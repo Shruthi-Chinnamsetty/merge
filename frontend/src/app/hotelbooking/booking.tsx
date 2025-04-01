@@ -203,19 +203,19 @@ export default function BookingsPage() {
         {error && <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">{error}</div>}
 
         {/* Search section */}
-        <div className="mb-6 p-5 bg-indigo-100 rounded-lg shadow-sm">
-          <h2 className="text-xl font-semibold mb-3 text-indigo-900">Search for Hotels</h2>
+        <div className="mb-6 p-5 bg-BLACK-100 rounded-lg shadow-sm">
+          <h2 className="text-xl font-semibold mb-3 text-Black-900">Search for Hotels</h2>
           <div className="flex gap-2 mb-4">
             <input
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               placeholder="Enter location..."
-              className="flex-1 p-3 border border-indigo-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
+              className="flex-1 p-3 border border-BLACK-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
             />
             <button
               onClick={searchHotels}
-              className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-sm"
+              className="bg-BLACK-600 hover:bg-BLACK-700 text-BLACK px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-sm"
             >
               🔍 Search
             </button>
@@ -292,7 +292,7 @@ export default function BookingsPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="w-full p-3 border border-black-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 placeholder="Enter email address"
               />
             </div>
